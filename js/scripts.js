@@ -1,19 +1,11 @@
-/*!
-* Start Bootstrap - Shop Homepage v5.0.6 (https://startbootstrap.com/template/shop-homepage)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
-*/
-// This file is intentionally blank
-// Use this file to add JavaScript to your project
-
-
+//window.onload = function(){
 //Recherche les vins dont le nom contient ‘Chateau’
 // Récupération des éléments du DOM
+
+/*
 const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
 const searchInput = document.getElementById('search-input'); // Le champ de saisie de texte
 const wineList = document.getElementById('wine-list'); // Le conteneur pour les résultats
-
-
 
 // Écouteur d'événements pour le formulaire de recherche
 searchForm.addEventListener('submit', function(event) {
@@ -114,31 +106,44 @@ function displayComments(comments) {
     }
 }
 
-
+*/
 // Pour supprimer une image que l'utilisateur a ajouté d'un vin selectionné
-
 function deletePics(){
-
-    const deletePics = document.forms['frmDELETE'].btAdd;
-
+    const deletePics = document.forms['frmDELETE'].btAdd;              
 }
 
-function Authentification(){
+let btValide = document.getElementById('valide');
+let inputLogin = document.getElementById('login');
+let form = document.getElementById("loginUsers");
+btValide.addEventListener("click", function() {
+    Authentification(inputLogin);
+});
 
-let btValide = document.getElementById(valide);
-let inputLogin = document.getElementById(login);
-
-
+function Authentification(inputLogin) {
+    if(inputLogin.value === ""){
+        alert('Notez un login');
+        return;
+    }else{
     fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users")
-    .then(response => {
-        return response.json();
-    })
-    .then(users => {
-    users.forEach(user => {
+        .then(response => {
+            return response.json();
+        })
+        .then(users => {
+            let trouve = users.find(user => user.login === inputLogin.value);
 
-        if(inputLogin.value === user.login) {
-            
+            if (trouve) { 
+                alert(`Bienvenue, ${trouve.login}! Tu es connecté.`);  
+                form.remove();
+            let succes = fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users/authenticate")
+                .then(response => {
+                    return response.json();
+                }).then(val => {
+                    succes = true;
+                    alert('succes');
+                })
+            } else { 
+                alert('Connexion raté. Login invalide.');
             }
         })
-    })
+    }
 }

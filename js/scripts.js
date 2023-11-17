@@ -48,7 +48,7 @@ function searchWines(name) {
         });
 }
 
-/** 
+
 //Ajoute ou retire le vin 10 parmi ses préférés
 // Récupération de l'élément de vin correspondant au vin 10
 const wine10 = document.querySelector('.wine-10'); // Rajouter une classe "wine-10" à l'élément du vin 10
@@ -57,7 +57,7 @@ const wine10 = document.querySelector('.wine-10'); // Rajouter une classe "wine-
 wine10.addEventListener('click', function() {
     const isLiked = wine10.classList.contains('liked'); // Vérifie si le vin 10 est déjà dans les favoris
 
-    // Appeler une fonction pour ajouter ou retirer le vin 10 parmi les favoris 
+    // Appele une fonction pour ajouter ou retirer le vin 10 parmi les favoris 
     likeOrUnlikeWine(10, !isLiked); // Inverse (true devient false et vice versa)
 });
 
@@ -78,7 +78,6 @@ function likeOrUnlikeWine(wineId, like) {
     })
     .then(response => response.json())
     .then(data => {
-        // Mettez à jour l'apparence de l'élément (ajouté ou retiré des favoris)
         if (like) {
             wine10.classList.add('liked');
         } else {
@@ -89,7 +88,7 @@ function likeOrUnlikeWine(wineId, like) {
         console.error('Une erreur s\'est produite :', error);
     });
 }
-*/
+
 
 
 

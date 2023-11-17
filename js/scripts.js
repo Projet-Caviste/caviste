@@ -113,3 +113,32 @@ function displayComments(comments) {
         });
     }
 }
+
+
+// Pour supprimer une image que l'utilisateur a ajouté d'un vin selectionné
+
+function deletePics(){
+
+    const deletePics = document.forms['frmDELETE'].btAdd;
+
+}
+
+function Authentification(){
+
+let btValide = document.getElementById(valide);
+let inputLogin = document.getElementById(login);
+
+
+    fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users")
+    .then(response => {
+        return response.json();
+    })
+    .then(users => {
+    users.forEach(user => {
+
+        if(inputLogin.value === user.login) {
+            
+            }
+        })
+    })
+}

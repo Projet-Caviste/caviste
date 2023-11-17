@@ -1,9 +1,8 @@
 //window.onload = function(){
+
 //Recherche les vins dont le nom contient ‘Chateau’
 // Récupération des éléments du DOM
-
-
-/**const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
+const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
 const searchInput = document.getElementById('search-input'); // Le champ de saisie de texte
 const wineList = document.getElementById('wine-list'); // Le conteneur pour les résultats
 
@@ -18,8 +17,8 @@ searchForm.addEventListener('submit', function(event) {
 });
 
 // Fonction pour effectuer la recherche des vins et mettre à jour la liste
-function searchWines(Chateau) {
-    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/search?keyword=${Chateau}`; // Construit l'URL de l'API avec le terme de recherche
+function searchWines(name) {
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/search?keyword=${name}`; 
 
     fetch(apiUrl) // Effectue une requête GET vers l'API
         .then(response => response.json()) // Convertit la réponse en JSON
@@ -47,7 +46,50 @@ function searchWines(Chateau) {
         .catch(error => {
             console.error('Une erreur s\'est produite :', error); // Gère les erreurs
         });
-}**/
+}
+
+/** 
+//Ajoute ou retire le vin 10 parmi ses préférés
+// Récupération de l'élément de vin correspondant au vin 10
+const wine10 = document.querySelector('.wine-10'); // Rajouter une classe "wine-10" à l'élément du vin 10
+
+// Écouteur d'événements pour ajouter ou retirer le vin 10 parmi les favoris
+wine10.addEventListener('click', function() {
+    const isLiked = wine10.classList.contains('liked'); // Vérifie si le vin 10 est déjà dans les favoris
+
+    // Appeler une fonction pour ajouter ou retirer le vin 10 parmi les favoris 
+    likeOrUnlikeWine(10, !isLiked); // Inverse (true devient false et vice versa)
+});
+
+// Fonction pour ajouter ou retirer le vin parmi les favoris
+function likeOrUnlikeWine(wineId, like) {
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/like`;
+    const requestData = {
+        like: like // true pour ajouter aux favoris, false pour retirer des favoris
+    };
+
+    // Une requête POST 
+    fetch(apiUrl, {
+        method: 'POST', 
+        body: JSON.stringify(requestData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Mettez à jour l'apparence de l'élément (ajouté ou retiré des favoris)
+        if (like) {
+            wine10.classList.add('liked');
+        } else {
+            wine10.classList.remove('liked');
+        }
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite :', error);
+    });
+}
+*/
 
 
 

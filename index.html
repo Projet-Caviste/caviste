@@ -15,8 +15,8 @@
                 <!-- Barres de recherche -->
                 <div class="BarreSeach">
                     <div class="container py-3">
-                        <form> 
-                            <input type="search" placeholder="Recherche" > 
+                        <form id="search-form"> <!--id rajouter pour le formulaire-->
+                            <input type="search" placeholder="Recherche" id="search-input" > <!--id rajouter pour le champ de saisi-->
                             <button type="submit">Rechercher</button>
                         </form>
                     </div>
@@ -63,67 +63,69 @@
             <ul class="info"></ul>
         
             <!-- Liste des vins -->
-            <script>
-                let ulElement = document.querySelector(".vin");
-                let ulDescription = document.querySelector(".info");
-        
-                fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then((wines) => {       
-                        wines.forEach(wine => {
-                            const liElementName = document.createElement("button");
-                            liElementName.innerText = wine.name;
-                            ulElement.appendChild(liElementName);
-        
-                            liElementName.addEventListener('click', () => {
-                                fetch(`https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}`)
-                                    .then(response => response.json())
-                                    .then(selectionVin => {
-                                        Affichage(wine);
-                                    });
+            <div id="wine-list">   <!--id rajouter la liste des vins-->
+                <script>
+                    let ulElement = document.querySelector(".vin");
+                    let ulDescription = document.querySelector(".info");
+            
+                    fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
+                        .then(response => {
+                            return response.json();
+                        })
+                        .then((wines) => {       
+                            wines.forEach(wine => {
+                                const liElementName = document.createElement("button");
+                                liElementName.innerText = wine.name;
+                                ulElement.appendChild(liElementName);
+            
+                                liElementName.addEventListener('click', () => {
+                                    fetch(`https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}`)
+                                        .then(response => response.json())
+                                        .then(selectionVin => {
+                                            Affichage(wine);
+                                        });
+                                });
                             });
                         });
-                    });
-        
-                function Affichage(wine){
-        
-                    ulDescription.innerHTML = "";
-                    let liElementId = document.createElement("p");
-                    liElementId.innerText = "ID: " + wine.id;
-                    ulDescription.appendChild(liElementId);
-        
-                    let liElementName = document.createElement("p");
-                    liElementName.innerText = "Nom: " + wine.name;
-                    ulDescription.appendChild(liElementName);
-        
-                    let liElementRegion = document.createElement("p");
-                    liElementRegion.innerText = "Region: " + wine.region;
-                    ulDescription.appendChild(liElementRegion);
-        
-                    let liElementCountry = document.createElement("p");
-                    liElementCountry.innerText = "Pays: " + wine.country;
-                    ulDescription.appendChild(liElementCountry);
-        
-                    let liElementYear = document.createElement("p");
-                    liElementYear.innerText = "Année: " + wine.year;
-                    ulDescription.appendChild(liElementYear);
-        
-                    let liElementCapacity = document.createElement("p");
-                    liElementCapacity.innerText = "Capacité: " + wine.capacity;
-                    ulDescription.appendChild(liElementCapacity);
-        
-                    let liElementColor = document.createElement("p");
-                    liElementColor.innerText = "Couleur: " + wine.color;
-                    ulDescription.appendChild(liElementColor);
-        
-                    let liElementPrice = document.createElement("p");
-                    liElementPrice.innerText = "Prix: " + wine.price;
-                    ulDescription.appendChild(liElementPrice);
-        
-                }    
-            </script>        
+            
+                    function Affichage(wine){
+            
+                        ulDescription.innerHTML = "";
+                        let liElementId = document.createElement("p");
+                        liElementId.innerText = "ID: " + wine.id;
+                        ulDescription.appendChild(liElementId);
+            
+                        let liElementName = document.createElement("p");
+                        liElementName.innerText = "Nom: " + wine.name;
+                        ulDescription.appendChild(liElementName);
+            
+                        let liElementRegion = document.createElement("p");
+                        liElementRegion.innerText = "Region: " + wine.region;
+                        ulDescription.appendChild(liElementRegion);
+            
+                        let liElementCountry = document.createElement("p");
+                        liElementCountry.innerText = "Pays: " + wine.country;
+                        ulDescription.appendChild(liElementCountry);
+            
+                        let liElementYear = document.createElement("p");
+                        liElementYear.innerText = "Année: " + wine.year;
+                        ulDescription.appendChild(liElementYear);
+            
+                        let liElementCapacity = document.createElement("p");
+                        liElementCapacity.innerText = "Capacité: " + wine.capacity;
+                        ulDescription.appendChild(liElementCapacity);
+            
+                        let liElementColor = document.createElement("p");
+                        liElementColor.innerText = "Couleur: " + wine.color;
+                        ulDescription.appendChild(liElementColor);
+            
+                        let liElementPrice = document.createElement("p");
+                        liElementPrice.innerText = "Prix: " + wine.price;
+                        ulDescription.appendChild(liElementPrice);
+            
+                    }    
+                </script> 
+            </div>       
         
         
 

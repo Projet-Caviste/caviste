@@ -48,7 +48,7 @@ function searchWines(name) {
         });
 }
 
-
+/** 
 //Ajoute ou retire le vin 10 parmi ses préférés
 // Récupération de l'élément de vin correspondant au vin 10
 const wine10 = document.querySelector('.wine-10'); // Rajouter une classe "wine-10" à l'élément du vin 10
@@ -88,7 +88,7 @@ function likeOrUnlikeWine(wineId, like) {
         console.error('Une erreur s\'est produite :', error);
     });
 }
-
+*/
 
 
 

@@ -3,8 +3,7 @@
 //Recherche les vins dont le nom contient ‘Chateau’
 // Récupération des éléments du DOM
 const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
-const searchInput = document.getElementById('search-input'); // Le champ de saisie de texte
-const wineList = document.getElementById('wine-list'); // Le conteneur pour les résultats
+
 
 // Écouteur d'événements pour le formulaire de recherche
 searchForm.addEventListener('submit', function(event) {
@@ -120,6 +119,52 @@ async function findCommentsForWine(wine_id) {
 findCommentsForWine(8);
 
 
+
+
+//vins france triés par année
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAllFrenchWines();
+    setUpYearFilter();
+});
+
+let allFrenchWines = []; // Variable pour stocker tous les vins français
+
+function fetchAllFrenchWines() {
+    fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines?key=country&val=France&sort=year")
+        .then(response => response.json())
+        .then(data => {
+            allFrenchWines = data; // Stocker tous les vins français
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des données :', error);
+        });
+}
+
+function setUpYearFilter() {
+    const yearSelect = document.getElementById('tri2');
+
+    if (yearSelect) {
+        yearSelect.addEventListener('change', function() {
+            const selectedYear = this.options[this.selectedIndex].text;
+            displayWinesForYear(selectedYear);
+        });
+    } else {
+        console.error('Élément select pour les années non trouvé');
+    }
+}
+
+function displayWinesForYear(year) {
+    const filteredWines = allFrenchWines.filter(wine => wine.year === year);
+    const ulElement = document.querySelector(".vin");
+    ulElement.innerHTML = ''; // Effacer la liste actuelle des vins
+
+    filteredWines.forEach(wine => {
+        const liElement = document.createElement("li");
+        liElement.innerText = `${wine.name} - ${wine.year}`;
+        ulElement.appendChild(liElement);
+    });
+}
+
 // RETROUVER LE NOMBRE DE LIKE DU VIN 10 (aymard)
 
 // Définition de la fonction asynchrone pour récupérer le nombre de likes pour le vin 10
@@ -167,38 +212,37 @@ function deletePics(){
     const deletePics = document.forms['frmDELETE'].btAdd;              
 }
 
+
 let btValide = document.getElementById('valide');
-let inputLogin = document.getElementById('login');
 let form = document.getElementById("loginUsers");
+
 btValide.addEventListener("click", function() {
-    Authentification(inputLogin);
+    Authentification();
 });
 
-function Authentification(inputLogin) {
-    if(inputLogin.value === ""){
-        alert('Notez un login');
-        return;
-    }else{
-    fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users")
-        .then(response => {
-            return response.json();
-        })
-        .then(users => {
-            let trouve = users.find(user => user.login === inputLogin.value);
+function Authentification(){
 
-            if (trouve) { 
-                alert(`Bienvenue, ${trouve.login}! Tu es connecté.`);  
-                form.remove();
-            let succes = fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users/authenticate")
-                .then(response => {
-                    return response.json();
-                }).then(val => {
-                    succes = true;
-                    alert('succes');
-                })
-            } else { 
-                alert('Connexion raté. Login invalide.');
-            }
-        })
+    const login = document.getElementById('login').value;
+    const password = document.getElementById('password').value;
+    console.log(login);
+    const Auth = btoa(`${login}:${password}`)
+
+    const option = {
+        method : "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Basic ${Auth}`,
+        },
     }
-}
+        fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/users/authenticate",option)
+            .then(response => 
+                response.json())
+            .then(data => {
+                if(data.success === true){
+                    form.remove();  
+                    }else{ 
+                    alert('Connexion raté. Login invalide.');
+                }
+            })
+    
+    }

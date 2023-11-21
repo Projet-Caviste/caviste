@@ -91,32 +91,7 @@ function likeOrUnlikeWine(wineId, like) {
 
 
 
-//RETROUVER LES COMMENTAIRE DU VIN  10 (aymard)
 
-async function findCommentsForWine(wine_id) {
-    const apiURL10 = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/comments`;
-
-    try {
-        const response = await fetch(apiURL10, {
-            method: 'GET',
-            headers: {
-                'Content-Type':'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`La requête GET a échoué ${response.status}`)
-        } 
-        const comments = await response.json();
-        // Afficher le contenu de chaque commentaire
-        comments.forEach(comment => {
-            console.log('Commentaire:', comment.content);
-        });
-    } catch (error) {
-        console.error('Erreur lors de la récupération des commentaires :',error.message);
-    }
-}
-//appel de la fonction
-findCommentsForWine(8);
 
 
 
@@ -165,43 +140,38 @@ function displayWinesForYear(year) {
     });
 }
 
+
+
+
+
+       
+
 // RETROUVER LE NOMBRE DE LIKE DU VIN 10 (aymard)
 
-// Définition de la fonction asynchrone pour récupérer le nombre de likes pour le vin 10
-async function getLikeCount(wine_id) {
-    // Définition de l'URL de l'API
-    const apiURL11 = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/likes-count`;
+const getLikeCount = async () => {
+    const wine_id = 10;
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/likes-count`;
 
     try {
-        // Utilisation de l'API Fetch pour effectuer une requête GET
-        const response = await fetch(apiURL11, {
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
-        // Vérification si la réponse est OK (statut HTTP 200-299)
         if (!response.ok) {
-            // Si la réponse n'est pas OK, déclencher une erreur avec le statut HTTP
-            throw new Error(`La requête a échoué avec le statut ${response.status}`);
+            throw new Error(`La requête GET a échoué avec le statut ${response.status}`);
         }
 
-        // Extraction des données JSON de la réponse
-        const data = await response.json();
-
-        // Affichage du nombre total de likes dans la console
-        console.log(`Nombre de likes pour le vin ${wine_id}  :`, data.total);
+        const likes = await response.json();
+        return likes.total;
     } catch (error) {
-        // Gestion des erreurs : affichage de l'erreur dans la console
         console.error('Erreur lors de la récupération du nombre de likes :', error.message);
+        throw error;
     }
-}
-// Appel de la fonction asynchrone
-getLikeCount(7);
+};
 
-
-//MODIFIER LE COMMENTAIRE 3 DU VIN 10 (aymard)
 
 
   
@@ -246,3 +216,197 @@ function Authentification(){
             })
     
     }
+
+
+    let ulElement = document.querySelector(".vin");
+    let ulDescription = document.querySelector(".info");
+
+    fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
+        .then(response => {
+            return response.json();
+        })
+        .then((wines) => {       
+            wines.forEach(wine => {
+                const liElementName = document.createElement("button");
+                liElementName.innerText = wine.name;
+                ulElement.appendChild(liElementName);
+
+                liElementName.addEventListener('click', () => {
+                    fetch(`https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}`)
+                        .then(response => response.json())
+                        .then(selectionVin => {
+                            Affichage(wine);
+                        });
+                });
+            });
+        });
+
+
+        // Appel de la fonction pour récupérer la liste des vins depuis l'API
+fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
+.then(response => response.json())
+.then((wines) => {
+    wines.forEach(wine => {
+        // Création d'un bouton pour chaque vin
+        const liElementName = document.createElement("button");
+        liElementName.innerText = wine.name;
+        ulElement.appendChild(liElementName);
+
+        // Ajout d'un gestionnaire d'événement au clic sur le bouton
+        liElementName.addEventListener('click', () => {
+            // Appel de la fonction pour afficher les détails du vin
+            Affichage(wine);
+            // Appel de la fonction pour trouver les commentaires du vin
+            findCommentsForWine(wine.id);
+        });
+    });
+});
+    function Affichage(wine){
+
+        ulDescription.innerHTML = "";
+        let liElementId = document.createElement("p");
+        liElementId.innerText = "ID: " + wine.id;
+        ulDescription.appendChild(liElementId);
+
+        let liElementName = document.createElement("p");
+        liElementName.innerText = "Nom: " + wine.name;
+        ulDescription.appendChild(liElementName);
+
+        let liElementRegion = document.createElement("p");
+        liElementRegion.innerText = "Region: " + wine.region;
+        ulDescription.appendChild(liElementRegion);
+
+        let liElementCountry = document.createElement("p");
+        liElementCountry.innerText = "Pays: " + wine.country;
+        ulDescription.appendChild(liElementCountry);
+
+        let liElementYear = document.createElement("p");
+        liElementYear.innerText = "Année: " + wine.year;
+        ulDescription.appendChild(liElementYear);
+
+        let liElementCapacity = document.createElement("p");
+        liElementCapacity.innerText = "Capacité: " + wine.capacity;
+        ulDescription.appendChild(liElementCapacity);
+
+        let liElementColor = document.createElement("p");
+        liElementColor.innerText = "Couleur: " + wine.color;
+        ulDescription.appendChild(liElementColor);
+
+        let liElementPrice = document.createElement("p");
+        liElementPrice.innerText = "Prix: " + wine.price;
+        ulDescription.appendChild(liElementPrice);
+        
+        
+        // Ajout de l'icône de pouce (like)
+     getLikeCount()
+     .then(totalLikes => {
+         let likeIcon = document.createElement("span");
+         likeIcon.innerHTML = "&#128077; Likes: " + totalLikes; // Ajout du nombre de likes
+         ulDescription.appendChild(likeIcon);
+     })
+     .catch(error => {
+         console.error('Erreur lors de la récupération du nombre de likes :', error.message);
+     });
+
+     //RETROUVER LES COMMENTAIRE DU VIN  10 (aymard)
+// Récupération des éléments du DOM
+
+// Appel de la fonction pour trouver les commentaires du vin
+findCommentsForWine(wine.id);
+}
+
+// ...
+
+// Fonction pour trouver les commentaires d'un vin
+async function findCommentsForWine(wine_id) {
+    const apiURL = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/comments`;
+
+    try {
+        const response = await fetch(apiURL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`La requête GET a échoué ${response.status}`);
+        }
+        const comments = await response.json();
+
+        // Créer un conteneur div pour les commentaires
+        let commentairesDiv = document.createElement('div');
+        commentairesDiv.id = 'commentaires';
+
+         // Vérifier s'il y a des commentaires
+         if (comments && comments.length > 0) {
+            // Afficher le contenu de chaque commentaire dans la div des commentaires
+            comments.forEach(comment => {
+                let liElementComments = document.createElement("p");
+                liElementComments.innerText = "Commentaire: " + comment.content;
+                commentairesDiv.appendChild(liElementComments);
+            });
+
+            // Sélectionnez le corps du document et ajoutez la div des commentaires à ulDescription
+            ulDescription.appendChild(commentairesDiv);
+        } else {
+            console.log('Aucun commentaire trouvé.');
+        }
+
+        // Sélectionnez le corps du document et ajoutez la div des commentaires à ulDescription
+        ulDescription.appendChild(commentairesDiv);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commentaires :', error.message);
+    }
+}
+
+
+// Fonction pour modifier un commentaire
+function modifierCommentaire(commentId, nouveauContenu) {
+    // Vérifier si l'utilisateur est connecté (exemple : vérification d'une variable de session)
+
+    if (isAuthenticated) {
+        // Construire l'URL pour la modification du commentaire
+        const baseURL = 'https://cruth.phpnet.org/epfc/caviste/public/index.php/api';
+        const URL = `${baseURL}/comments/${commentId}`;
+
+        // Données pour la requête PUT
+            
+        const login = document.getElementById('login').value;
+        const password = document.getElementById('password').value;
+        const Auth = btoa(`${login}:${password}`);
+
+        const requestData = {
+            method: 'PUT',
+            body: JSON.stringify({
+                content: nouveauContenu
+            }),
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Basic ${Auth}`
+            }
+        };
+
+        // Effectuer la requête PUT pour mettre à jour le commentaire
+        fetch(URL, requestData)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`La requête PUT a échoué avec le statut ${response.status}`);
+                }
+            })
+            .then(data => {
+                console.log(data); // Afficher la réponse de la requête
+            })
+            .catch(error => {
+                console.error('Erreur lors de la mise à jour du commentaire :', error.message);
+            });
+    } else {
+        console.error('L\'utilisateur n\'est pas connecté. Autorisation refusée.');
+    }
+}
+
+// Exemple d'utilisation de la fonction
+modifierCommentaire();
+

@@ -303,7 +303,8 @@ fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 			});
 		});
 	});
-
+	
+	
 // Fonction qui permet d'afficher la description d'un vin selectionner dans 
 //la liste des vins qu'on récuperer par  rapport à l'api fournit
 function Affichage(wine) {
@@ -343,6 +344,12 @@ function Affichage(wine) {
 	let liElementPrice = document.createElement("li");
 	liElementPrice.innerText = "Prix: " + wine.price;
 	ulDescription.appendChild(liElementPrice);
+
+	let ElementImg = document.createElement("img");
+	let imageUrl = 'caviste/pics/';
+	ElementImg.src = imageUrl+wine.picture;
+	ulDescription.appendChild(ElementImg);
+	
 
 	// Ajout de l'icône de pouce (like)
 	getLikeCount()

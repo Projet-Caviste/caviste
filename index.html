@@ -1,82 +1,80 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8" />   
-        <title>Caviste</title>
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-
-        <link href="css/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-            <!-- Navigation-->
-            <nav>
-            <div class="Barre">
-    
-                <!-- Barres de recherche -->
-                <div class="BarreSeach">
-                    <div class="container py-3">
-                        <form id="search-form"> <!--id rajouter pour le formulaire-->
-                            <input type="search" placeholder="Recherche" id="search-input" > <!--id rajouter pour le champ de saisi-->
-                            <button type="submit">Rechercher</button>
-                        </form>
-                    </div>
-                </div>
-        
-        
-                <div class="container py-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="tri1">Tous les Pays :</label>
-                                <select class="form-select" id="tri1">
-                                    <option selected>Choisissez...</option>
-                                    <option value="option1">France</option>
-                                    <option value="option2">Usa</option>
-                                    <option value="option3">Belgique</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <label class="input-group-text" for="tri2">Vins de France par année:</label>
-                                <select class="form-select" id="tri2">
-                                    <option selected>Choisissez...</option>
-                                    <option value="2005">2005</option>
-                                    <option value="2009">2009</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2022">2022</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <head>
+    <meta charset="utf-8" />
+    <title>Caviste</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> <!-- Modifier--> 
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation-->
+    <nav>
+      <div class="Barre">
+        <!-- Barres de recherche -->
+        <div class="BarreSeach">
+          <div class="container py-3">
+            <form id="search-form">
+              <!--id rajouter pour le formulaire-->
+              <input type="search" placeholder="Recherche" id="search-input">
+              <!--id rajouter pour le champ de saisi-->
+              <button type="submit">Rechercher</button>
+            </form>
+          </div>
+        </div>
+        <div class="container py-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <label class="input-group-text" for="tri1">Tous les Pays :</label>
+                <select class="form-select" id="tri1">
+                  <option selected>Choisissez...</option>
+                  <option value="option1">France</option>
+                  <option value="option2">Usa</option>
+                  <option value="option3">Belgique</option>
+                </select>
+              </div>
             </div>
-        
-            
-            <div id="loginUsers">
-                <input id="login" placeholder="login">
-                <input id="password" placeholder="mdp">
-                <button id="valide">Authentification</button>
+            <div class="col-md-6">
+              <div class="input-group">
+                <label class="input-group-text" for="tri2">Vins de France par année:</label>
+                <select class="form-select" id="tri2">
+                  <option selected>Choisissez...</option>
+                  <option value="2005">2005</option>
+                  <option value="2009">2009</option>
+                  <option value="2013">2013</option>
+                  <option value="2022">2022</option>
+                </select>
+              </div>
             </div>
-            </nav>
-        
-            <ul class="vin">
-            </ul>
-            <ul class="info"></ul>
-        
-            <!-- Liste des vins -->
-            <div id="wine-list">   <!--id rajouter la liste des vins-->
-                
-            </div>       
-        
-        
-
-
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
-        </footer>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-    </body>
+          </div>
+        </div>
+      </div>
+      
+      <div id="loginUsers" class="show">
+        <div id="loginSection">
+          <input id="login" placeholder="Login">
+          <input id="password" type="password" placeholder="Mot de passe">
+          <button id="valide">Connexion</button>
+        </div>
+        <div id="logoutSection" class="hide">
+          <button id="logoutButton">Déconnexion</button>
+        </div>
+      </div>
+      
+    </nav>
+    <ul class="vin"></ul>
+    <ul class="info"></ul>
+    <!-- Liste des vins -->
+    <div id="wine-list">
+      <!--id rajouter la liste des vins-->
+    </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+      </div>
+    </footer>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+  </body>
 </html>

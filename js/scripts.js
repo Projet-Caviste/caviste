@@ -313,7 +313,7 @@ function Affichage(wine) {
 	ulDescription.innerHTML = "";
 	//On crée le li pour l'utiliser
 	let liElementId = document.createElement("li");
-	liElementId.innerText = "ID: " + wine.id;
+	liElementId.innerText = "Numéro: " + wine.id;
 	// On le met dans l'ul
 	ulDescription.appendChild(liElementId);
 

@@ -346,8 +346,9 @@ function Affichage(wine) {
 	ulDescription.appendChild(liElementPrice);
 
 	let ElementImg = document.createElement("img");
-	let imageUrl = 'caviste/pics/';
+	let imageUrl = '/pics/';
 	ElementImg.src = imageUrl+wine.picture;
+	console.log(wine.picture);
 	ulDescription.appendChild(ElementImg);
 	
 

@@ -283,7 +283,7 @@ fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 			});
 		});
 	});
- 
+ /*
 //Une fonction pour récupérer la liste des vins dans l'api
 fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 	.then(response => response.json())
@@ -303,7 +303,7 @@ fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 			});
 		});
 	});
-	
+*/	
 	
 // Fonction qui permet d'afficher la description d'un vin selectionner dans 
 //la liste des vins qu'on récuperer par  rapport à l'api fournit

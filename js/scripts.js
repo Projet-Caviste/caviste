@@ -5,7 +5,9 @@
 const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
 const searchInput = document.getElementById('search-input'); // Le champ de saisie de texte
 const wineList = document.getElementById('wine-list'); // Le conteneur pour les résultats
-
+let btElement;
+let wineIdSelected;
+ 
 // Écouteur d'événements pour le formulaire de recherche
 searchForm.addEventListener('submit', function(event) {
 	event.preventDefault(); // Empêche la soumission du formulaire par défaut
@@ -48,7 +50,7 @@ function searchWines(name) {
 		});
 }
 
-
+/*
 //Ajoute un commentaire pour le vin 10
 // Récupération des éléments du DOM pour le formulaire de commentaire
 const commentForm = document.getElementById('comment-form'); // Le formulaire de commentaire
@@ -133,7 +135,7 @@ function deleteComment(wine_id, commentId) {
     });
 }
 
-
+*/
 //vins france triés par année
 document.addEventListener('DOMContentLoaded', function() {
 	fetchAllFrenchWines();
@@ -206,7 +208,7 @@ function Authentification() {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-			'Authorization': `Basic ${Auth}`,
+			Authorization: `Basic ${Auth}`,
 		},
 	}
     //Appel de l'api
@@ -218,8 +220,8 @@ function Authentification() {
 			if (data.success === true) {
                 //On enregistre les valeurs dans un localStorage pour que l'uilisateur n'a pas besoin de se
                 //connecter si la page a été rafraichit seulement 
-                let localLogin = localStorage.setItem('login',login);
-                let localPassword = localStorage.setItem('mot de passe',password);
+                localStorage.setItem('login',login);
+                localStorage.setItem('mot de passe',password);
                 //On cache le formulaire  login et on affiche le bouton pour se déconnecter
                 document.getElementById('loginSection').classList.add('hide');
                 document.getElementById('logoutSection').classList.remove('hide');
@@ -274,13 +276,15 @@ function VérificationConnexion() {
             })
     } else {
         // Si les informations de connexion ne sont pas présentes dans le localStorage
-        console.log('Les identifiants de l\'utilisateur nesont pas dans le localStorage');
+        console.log('Les identifiants de l\'utilisateur ne  sont pas dans le localStorage');
     }
 }
 
-//Création des 2 ul qui vont permettre de mettre les vins et leur description 
+//Création des 3 ul qui vont permettre de mettre les vins, leur description et les commentaires
 let ulElement = document.querySelector(".vin");
 let ulDescription = document.querySelector(".info");
+let ulComments = document.querySelector("#commentsBox");
+
 //Appel de l'api pour récuperer les vins 
 fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 	.then(response => {
@@ -303,32 +307,13 @@ fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
 			});
 		});
 	});
- /*
-//Une fonction pour récupérer la liste des vins dans l'api
-fetch("https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines")
-	.then(response => response.json())
-	.then((wines) => {
-		wines.forEach(wine => {
-			// Création d'un bouton pour chaque vin
-			const liElementName = document.createElement("button");
-			liElementName.innerText = wine.name;
-			ulElement.appendChild(liElementName);
 
-			// Ajout d'un gestionnaire d'événement quand on click sur le bouton
-			liElementName.addEventListener('click', () => {
-				// Appel de la fonction pour afficher la desciption du vin
-				Affichage(wine);
-				// Appel de la fonction pour trouver les commentaires du vin
-				findCommentsForWine(wine.id);
-			});
-		});
-	});
-*/	
-	
 
 function Affichage(wine) {
 
-	//C'est l'ul vide qui va nous permettre les li avec la desciption dedans
+	wineIdSelected=wine.id;
+
+	//C'est l'ul vide qui va nous permettre de placer les li avec la desciption 
 	ulDescription.innerHTML = "";
 	//On crée le li pour l'utiliser
 	let liElementId = document.createElement("li");
@@ -367,7 +352,6 @@ function Affichage(wine) {
 	let ElementImg = document.createElement("img");
 	let imageUrl = 'https://cruth.phpnet.org/epfc/caviste/public/pics/'
 	ElementImg.src = imageUrl+wine.picture;
-	console.log(wine.picture);
 	ulDescription.appendChild(ElementImg);
 
 
@@ -391,13 +375,11 @@ function Affichage(wine) {
 					if (!response.ok) {
 						throw new Error(`La requête GET a échoué avec le statut ${response.status}`);
 					}
-			
+
 					const likes = await response.json();
-			
+
 					// Convertir le champ "total" en nombre
 					const totalLikes = parseInt(likes.total);
-					console.log(totalLikes);
-
 					// Mettre à jour le contenu de likeIcon avec le nombre de likes obtenu
 					likeIcon.innerHTML = `&#128077;  ${totalLikes} Likes`;
 					return totalLikes;
@@ -419,11 +401,18 @@ function Affichage(wine) {
     });
 
 	
-	//RETROUVER LES COMMENTAIRE DU VIN  10 (aymard)
+	function setAttributes(element, attributes) {
+		for (let key in attributes) {
+		  element.setAttribute(key, attributes[key]);
+		}
+	}
 
+	let i = 0;
+
+	//RETROUVER LES COMMENTAIRE DU VIN (aymard)
 	async function findCommentsForWine() {
 		const apiURL = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}/comments`;
-	
+
 		try {
 			const response = await fetch(apiURL, {
 				method: 'GET',
@@ -437,55 +426,113 @@ function Affichage(wine) {
 			// Si la réponse est OK, nous continuons avec le traitement des commentaires
 			const comments = await response.json();
 	
-			// Vérifier s'il y a des commentaires
-			if (comments && comments.length > 0) {
-				let h3Element = document.createElement("h3");
-				h3Element.innerText = "Commentaires";
+			ulComments.innerHTML = '';		
 				
-				ulDescription.appendChild(h3Element);
 				comments.forEach(comment => {
-					let pElement = document.createElement("p");
-					pElement.innerText = `${comment.user_id} : ${comment.content}`;
-			
-					// Ajouter l'élément p pour chaque commentaire à ulDescription
-					ulDescription.appendChild(pElement);
-				});
-			} else {
-				console.log('Aucun commentaire trouvé.');
-			}
+
+					let labelElement = document.createElement("label");
+					labelElement.innerText = `${comment.user_id} : ${comment.content}`;
+					ulComments.appendChild(labelElement);
+				
+					btElement = document.createElement("button");
+					setAttributes(btElement,{id:`comments${i}`,class:"select"},na);
+					labelElement.appendChild(btElement);
+					i++;
+				})
+
+				console.log(ulComments);
+
+
 		} catch (error) {
 			console.error('Erreur lors de la récupération des commentaires :', error.message);
 		}
 	}
 	// Appel de la fonction findCommentsForWine
-	findCommentsForWine(5);
-};
+	findCommentsForWine();
+	let allInput = document.getElementById("commentsBox").getElementsByTagName("input");
+	//console.log(allInput);
+}
 
 
-//  Modifier un commentaire( aymard)
+// Récupération des éléments du DOM pour le formulaire de modification de commentaire
+const modifyCommentForm = document.getElementById('modify-comment-form');
+const newCommentContentInput = document.getElementById('new-comment-content');
 
 
-async function modifierCommentaire(wineId, commentId, newContent) {
-    const url = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/comments/${commentId}`;
-	console.log("Paramètres reçus :", wineId, commentId, newContent);
+// Fonction pour remplir dynamiquement la liste déroulante avec les commentaires
+async function fillCommentList() 		{
+    const wineId = wineIdSelected; 
 
     try {
-        const response = await fetch(url, {
+        const response = await fetch(`https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/comments`);
+        const comments = await response.json();
+
+        comments.forEach(comment => {
+            const option = document.createElement('option');
+            option.value = comment.id;
+            option.textContent = `Commentaire #${comment.id}`;
+            ulComments.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commentaires :', error.message);
+    }
+}
+
+// Appel de la fonction pour remplir la liste déroulante au chargement de la page
+document.addEventListener('DOMContentLoaded', fillCommentList);
+
+let selectedCommentId;
+
+// Écouteur d'événements pour le formulaire de modification de commentaire
+modifyCommentForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const wineId = 11; // ID du vin
+    selectedCommentId = btElement; // ID du commentaire sélectionné
+	console.log('ac2',btElement);
+    const newCommentContent = newCommentContentInput.value; // Nouveau contenu du commentaire
+
+    modifierCommentaire(wineId, selectedCommentId, newCommentContent);
+});
+
+async function modifierCommentaire(wineId, commentId, newContent) {
+
+	commentId = selectedCommentId;
+
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/comments/${commentId}`;
+
+
+    try {
+        const response = await fetch(apiUrl, {
             method: 'PUT',
-            mode: 'cors',
             headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Authorization': 'Basic ' + btoa(`bob:123`)
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "content": newContent })
+            body: JSON.stringify({ content: newContent })
         });
 
         if (!response.ok) {
             throw new Error(`La requête PUT a échoué avec le statut ${response.status}`);
         }
 
-        console.log('Commentaire modifié avec succès.');
+        const data = await response.json(); // Si l'API renvoie des données en réponse
+
+        console.log('Commentaire modifié avec succès :', data);
+        // Vous pouvez effectuer des actions supplémentaires après la modification du commentaire si nécessaire
     } catch (error) {
         console.error('Erreur lors de la modification du commentaire :', error.message);
     }
 }
+
+// Écouteur d'événements pour le formulaire de modification de commentaire
+modifyCommentForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const wineId = wineIdSelected; // ID du vin
+    const selectedCommentId = ulComments.value; // ID du commentaire sélectionné
+    const newCommentContent = newCommentContentInput.value; // Nouveau contenu du commentaire
+
+    modifierCommentaire(wineId, selectedCommentId, newCommentContent);
+});
+
+

@@ -62,18 +62,28 @@
       </div>
       
     </nav>
-    <ul class="vin"></ul>
-    <ul class="info"></ul>
+
+      <ul class="vin"></ul>
+
+      <ul class="info"></ul>
+
+      <section class="comments">
+        <h3> Commentaires </h3>
+          <ul id="commentsBox"></ul>
+      </section>
+
 
      <!-- Formulaire de commentaire -->
      <div class="container py-3">
-      <form id="comment-form">
+      <form id="modify-comment-form">
           <div class="mb-3">
               <label for="comment-input" class="form-label">Ajouter un commentaire :</label>
               <textarea class="form-control" id="comment-input" rows="3"></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Ajouter le commentaire</button>
           <button id="delete-comment">Supprimer le commentaire</button>
+          <input type="text" id="new-comment-content" placeholder="Nouveau contenu du commentaire">
+          <button type="submit">Modifier le commentaire</button>
       </form>
     </div>
 
@@ -81,8 +91,7 @@
     <div id="wine-list">
       <!--id rajouter la liste des vins-->
       <div id="comments-container"></div>
-      
-
+    
     </div>
     <!-- Footer-->
     <footer class="py-5 bg-dark">

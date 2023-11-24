@@ -16,8 +16,6 @@ searchForm.addEventListener('submit', function(event) {
 	searchWines(keyword);
 });
 
-
-
 // Fonction pour effectuer la recherche des vins et mettre à jour la liste
 function searchWines(name) {
 	const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/search?keyword=${name}`;
@@ -379,7 +377,7 @@ function Affichage(wine) {
 			ulDescription.appendChild(likeIcon);
 			
 		
-	async function getLikeCount(wineId) {
+	async function getLikeCount() {
 				const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}/likes-count`;
 			
 				try {
@@ -414,7 +412,7 @@ function Affichage(wine) {
 	 liElementId.addEventListener('click', async () => {
         try {
             // Appel de la fonction pour afficher les commentaires correspondants au vin
-            await findCommentsForWine(wine.id);
+            await findCommentsForWine();
         } catch (error) {
             console.error('Erreur lors de la récupération des commentaires :', error.message);
         }
@@ -422,9 +420,9 @@ function Affichage(wine) {
 
 	
 	//RETROUVER LES COMMENTAIRE DU VIN  10 (aymard)
-	const wine_id = 10;
-	async function findCommentsForWine(wine_id) {
-		const apiURL = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/comments`;
+
+	async function findCommentsForWine() {
+		const apiURL = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine.id}/comments`;
 	
 		try {
 			const response = await fetch(apiURL, {
@@ -449,8 +447,6 @@ function Affichage(wine) {
 					let pElement = document.createElement("p");
 					pElement.innerText = `${comment.user_id} : ${comment.content}`;
 			
-					console.log(comment.content);
-			
 					// Ajouter l'élément p pour chaque commentaire à ulDescription
 					ulDescription.appendChild(pElement);
 				});
@@ -466,11 +462,12 @@ function Affichage(wine) {
 };
 
 
-//  Modifier le commentaire 3 du vin 10 ( aymard)
+//  Modifier un commentaire( aymard)
 
-async function modifierCommentaire(wineId, commentId, newContent, ) {
+
+async function modifierCommentaire(wineId, commentId, newContent) {
     const url = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/comments/${commentId}`;
-	console.log("Paramètres reçus :", wineId, commentId, newContent,);
+	console.log("Paramètres reçus :", wineId, commentId, newContent);
 
     try {
         const response = await fetch(url, {
@@ -492,6 +489,3 @@ async function modifierCommentaire(wineId, commentId, newContent, ) {
         console.error('Erreur lors de la modification du commentaire :', error.message);
     }
 }
-
-// Exemple d'appel de la fonction avec de nouvelles données
-modifierCommentaire(4, 749 , "Nouveau contenu du commentaire",);

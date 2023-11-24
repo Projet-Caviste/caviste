@@ -3,7 +3,8 @@
 //Recherche les vins dont le nom contient ‘Chateau’
 // Récupération des éléments du DOM
 const searchForm = document.getElementById('search-form'); // Le formulaire de recherche
-
+const searchInput = document.getElementById('search-input'); // Le champ de saisie de texte
+const wineList = document.getElementById('wine-list'); // Le conteneur pour les résultats
 
 // Écouteur d'événements pour le formulaire de recherche
 searchForm.addEventListener('submit', function(event) {
@@ -49,29 +50,33 @@ function searchWines(name) {
 		});
 }
 
-/** 
-//Ajoute ou retire le vin 10 parmi ses préférés
-// Récupération de l'élément de vin correspondant au vin 10
-const wine10 = document.querySelector('.wine-10'); // Rajouter une classe "wine-10" à l'élément du vin 10
 
-// Écouteur d'événements pour ajouter ou retirer le vin 10 parmi les favoris
-wine10.addEventListener('click', function() {
-    const isLiked = wine10.classList.contains('liked'); // Vérifie si le vin 10 est déjà dans les favoris
+//Ajoute un commentaire pour le vin 10
+// Récupération des éléments du DOM pour le formulaire de commentaire
+const commentForm = document.getElementById('comment-form'); // Le formulaire de commentaire
+const commentInput = document.getElementById('comment-input'); // Le champ de saisie du commentaire
 
-    // Appele une fonction pour ajouter ou retirer le vin 10 parmi les favoris 
-    likeOrUnlikeWine(10, !isLiked); // Inverse (true devient false et vice versa)
+// Écouteur d'événements pour le formulaire de commentaire
+commentForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche la soumission du formulaire par défaut
+
+    const wine_id = 10; // ID du vin 10
+    const commentContent = commentInput.value; // Récupère le contenu du commentaire saisi par l'utilisateur
+
+    // Appeler une fonction qui ajoute un commentaire pour le vin 10
+    addComment(wine_id, commentContent);
 });
 
-// Fonction pour ajouter ou retirer le vin parmi les favoris
-function likeOrUnlikeWine(wineId, like) {
-    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wineId}/like`;
+// Fonction pour ajouter un commentaire
+function addComment(wine_id, content) {
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/comments`;
     const requestData = {
-        like: like // true pour ajouter aux favoris, false pour retirer des favoris
+        content: content
     };
 
-    // Une requête POST 
+    // Effectuer une requête POST pour ajouter un commentaire
     fetch(apiUrl, {
-        method: 'POST', 
+        method: 'POST',
         body: JSON.stringify(requestData),
         headers: {
             'Content-Type': 'application/json'
@@ -79,17 +84,57 @@ function likeOrUnlikeWine(wineId, like) {
     })
     .then(response => response.json())
     .then(data => {
-        if (like) {
-            wine10.classList.add('liked');
+        console.log('Commentaire ajouté avec succès :', data);
+
+        // Effacer le champ de saisie après l'ajout du commentaire
+        commentInput.value = '';
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite :', error);
+    });
+}
+
+//Supprime le commentaire 3 du vin 10
+// Récupération des éléments du DOM pour le bouton de suppression de commentaire
+const deleteCommentButton = document.getElementById('delete-comment'); 
+
+// Écouteur d'événements pour le bouton de suppression de commentaire
+deleteCommentButton.addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const wineIdToDelete = 10; // l'ID du vin
+    const commentIdToDelete = 3; // l'ID du commentaire à supprimer
+
+    // Fonction de suppression du commentaire
+    deleteComment(wineIdToDelete, commentIdToDelete);
+});
+
+// Fonction pour supprimer un commentaire
+function deleteComment(wine_id, commentId) {
+    const apiUrl = `https://cruth.phpnet.org/epfc/caviste/public/index.php/api/wines/${wine_id}/comments/${commentId}`;
+
+    // Requête DELETE pour supprimer le commentaire
+    fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // La suppression réussie 
+            console.log(`Commentaire ${commentId} du vin ${wine_id} supprimé avec succès.`);
+
+            // Echec de suppression
         } else {
-            wine10.classList.remove('liked');
+            console.error(`Échec de la suppression du commentaire ${commentId} du vin ${wine_id}.`);
         }
     })
     .catch(error => {
         console.error('Une erreur s\'est produite :', error);
     });
 }
-*/
+
 
 //vins france triés par année
 document.addEventListener('DOMContentLoaded', function() {

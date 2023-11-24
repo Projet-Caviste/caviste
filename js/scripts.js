@@ -434,8 +434,8 @@ function Affichage(wine) {
 					labelElement.innerText = `${comment.user_id} : ${comment.content}`;
 					ulComments.appendChild(labelElement);
 				
-					btElement = document.createElement("button");
-					setAttributes(btElement,{id:`comments${i}`,class:"select"},na);
+					btElement = document.createElement("input");
+					setAttributes(btElement,{id:`comments${i}`,type:"checkbox",class:"select"});
 					labelElement.appendChild(btElement);
 					i++;
 				})

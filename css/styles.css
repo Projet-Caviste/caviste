@@ -3,29 +3,47 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
+  background-image: url(../alcohol.jpg);
   font-family: Arial, sans-serif;
   line-height: 1.6;
-  background-color: #f5f5f5;
+  background-color: #270b0b;
   margin: 0;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+  opacity: 0.9;
 }
+
 
 .info {
   position: absolute;
   top: 40%; 
   right: 40%; 
-  background-color: #ffffff;
+  background-color: hwb(0 100% 0%);
   border: 1px solid #000000;
   padding: 20px;
   width: 250px;
   max-width: 30%; 
 }
-
 nav {
-  background-color: #9245a0;
+  background-image: url(../verres.jpg);
+  background-size:contain;
+  display: flex;
+  justify-content: space-between; /* Aligner les éléments sur la même ligne avec un espace entre eux */
+  align-items: center; /* Centrer verticalement les éléments sur la ligne */
+  background-color: hsl(0, 40%, 45%);
   padding: 15px 20px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+ 
+}
+
+.nav-left {
+  /* Styles spécifiques pour la partie gauche de la barre de navigation (listes de tri) */
+}
+
+.nav-right {
+  /* Styles spécifiques pour la partie droite de la barre de navigation (barre de recherche) */
 }
 
 nav ul {
@@ -51,6 +69,8 @@ nav a:hover {
   color: #ffffff;
 }
 
+/* Ajoutez d'autres styles selon vos besoins */
+
 
 .container {
   width: 80%;
@@ -64,7 +84,7 @@ nav a:hover {
   /* Nouveaux styles pour la liste des commentaires */
   position: absolute;
   top: 40%;
-  left: 50%; /* Déplace la liste des commentaires vers la droite */
+  left: 51%; /* Déplace la liste des commentaires vers la droite */
   transform: translateX(50%); /* Centrer horizontalement */
   background-color: #ffffff;
   border: 1px solid #000000;
@@ -128,5 +148,16 @@ a:hover {
 }
 
 footer{
-  bottom: 0%;
+  bottom:0%;
+  text-align: center;
+  margin-left: 265px;
+  position: relative;
+  width: 80%;
+}
+.modify-comment-form-container {
+  position: relative;
+  top:0px;
+  margin-left: 265px;}
+.text {
+  width: 85%; 
 }
